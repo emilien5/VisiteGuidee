@@ -22,7 +22,6 @@
                 <input type="text" id="prenom" name="prenom" value="" size="20" maxlength="60" />
                 <span class="erreur">${erreurs['Prenom']}</span>
                 <br />
-                
 
                 <label for="motdepasse">Mot de passe <span class="requis">*</span></label>
                 <input type="password" id="motdepasse" name="motdepasse" value="" size="20" maxlength="20" />
@@ -43,7 +42,7 @@
                 <input type="text" id="tel" name="tel" value="" size="20" maxlength="20" />
                 <br />
 
-                <input type="submit" value="Inscription" class="sansLabel" />
+                <input type="submit" value="Inscription" class="sansLabel"/>
             </fieldset>
             </form>
             </div>

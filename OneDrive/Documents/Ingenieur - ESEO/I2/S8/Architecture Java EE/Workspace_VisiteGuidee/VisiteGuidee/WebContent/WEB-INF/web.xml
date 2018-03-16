@@ -11,10 +11,14 @@
 	<servlet>
 		<servlet-name>Inscription</servlet-name>
 		<servlet-class>servlets.Inscription</servlet-class>
+		<servlet-name>Connexion</servlet-name>
+		<servlet-class>servlets.Connexion</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>Inscription</servlet-name>
 		<url-pattern>/inscription</url-pattern>
+		<servlet-name>Connexion</servlet-name>
+		<url-pattern>/connexion</url-pattern>
 	</servlet-mapping>
 </web-app>
