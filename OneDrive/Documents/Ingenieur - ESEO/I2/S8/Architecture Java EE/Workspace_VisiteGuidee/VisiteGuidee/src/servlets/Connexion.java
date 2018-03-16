@@ -19,8 +19,7 @@ public class Connexion extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private String nomUtilisateur;
 	private String motDePasse;
-	private Boolean valide;
-	
+    
 	public static final String VUE = "/WEB-INF/reservation.jsp";
 	public static final String VUE_ERREUR = "/WEB-INF/connexionErreur.jsp";
     public static final String CHAMP_NOM_UTILISATEUR = "nom";
@@ -33,14 +32,14 @@ public class Connexion extends HttpServlet {
 
     public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
 
-        Map<String, String> erreurs = new HashMap<String, String>();
+        Map<String, String> erreurs = new HashMap<>();
 
         /* Récupération des champs du formulaire. */
         nomUtilisateur = request.getParameter( CHAMP_NOM_UTILISATEUR );
         motDePasse = request.getParameter( CHAMP_PASS );
 
         try {
-			informationValide(nomUtilisateur, motDePasse);
+			boolean valide = informationValide(nomUtilisateur, motDePasse);
 			
 			if(valide == true) {
 				/* Stockage du résultat et des messages d'erreur dans l'objet request */
@@ -59,35 +58,19 @@ public class Connexion extends HttpServlet {
     }
     
     /* Valide le nom d'utilisateur saisi */
-    private void informationValide( String id, String mp ) throws Exception {
-	    	String url = "jdbc:mysql://localhost:8888/bdd_client";
-	    	String utilisateurBDD = "root";
-	    	String motDePasseBDD = "root";
-	    	Connection connexion = null;
-	    	try {
-	    	    connexion = DriverManager.getConnection( url, utilisateurBDD, motDePasseBDD );
-	
-	    	    /* Création de l'objet gérant les requêtes */
-	    	    Statement statement = connexion.createStatement();
-		    	ResultSet resultat = statement.executeQuery( "SELECT idUtilisateur FROM Utilisateur WHERE nomUtilisateur = "+ id +" and motDePasse = "+ mp +";" );
-	    	    if(resultat == null) {
-	    	    		this.valide = false;
-	            throw new Exception( "Le nom d'utilisateur est incorect." );
-	        } else {
-	        		this.valide = true;
-	        }
-	
+    private boolean informationValide( String id, String mp ) throws ClassNotFoundException{
+    		Class.forName("com.mysql.jdbc.Driver");
+        try(Connection connexion = DriverManager.getConnection("jdbc:mysql://localhost:8889/bdd_client?user=root&password=root");
+            Statement statement = connexion.createStatement();
+            ResultSet resultat = statement.executeQuery( "SELECT idUtilisateur FROM Utilisateur WHERE nomUtilisateur = '"+ id +"' and motDePasse = '"+ mp +"'" )) {
+	    	    if(resultat.next() != false) {
+                    return true;
+                }
 	    	} catch ( SQLException e ) {
 	    	    /* Gérer les éventuelles erreurs ici */
-	    	} finally {
-	    	    if (connexion != null)
-	    	        try {
-	    	            /* Fermeture de la connexion */
-	    	            connexion.close();
-	    	        } catch (SQLException ignore) {
-	    	            /* Si une erreur survient lors de la fermeture, il suffit de l'ignorer. */
-	    	        }
+	    		e.printStackTrace();
 	    	}
+	    	
+        return false;
     }
-   
 }
