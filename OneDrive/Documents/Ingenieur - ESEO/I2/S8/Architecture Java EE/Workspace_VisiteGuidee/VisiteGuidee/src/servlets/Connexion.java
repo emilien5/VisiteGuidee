@@ -61,10 +61,9 @@ public class Connexion extends HttpServlet {
     /* Valide le nom d'utilisateur saisi */
     private void informationValide( String id, String mp ) throws Exception {
 	    	String url = "jdbc:mysql://localhost:8888/bdd_client";
-	    	String utilisateurBDD = "admin";
-	    	String motDePasseBDD = "admin";
+	    	String utilisateurBDD = "root";
+	    	String motDePasseBDD = "root";
 	    	Connection connexion = null;
-	    	System.out.println("SDFGHJKDFGHJKDFGHJK");
 	    	try {
 	    	    connexion = DriverManager.getConnection( url, utilisateurBDD, motDePasseBDD );
 	
