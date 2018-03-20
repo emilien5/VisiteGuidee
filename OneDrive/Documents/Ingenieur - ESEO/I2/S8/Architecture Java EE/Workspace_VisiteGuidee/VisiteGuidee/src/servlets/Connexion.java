@@ -6,7 +6,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -25,11 +27,11 @@ public class Connexion extends HttpServlet {
     public static final String CHAMP_NOM_UTILISATEUR = "nom";
     public static final String CHAMP_PASS = "motdepasse";
     
-    public static String TypeVisite = "TypeVisite_DEFAULT";
-    public static String Ville = "Ville_DEFAULT";
-    public static String DateVisite = "DateVisite_DEFAULT";
-    public static String PrixVisite = "PrixVisite_DEFAULT";
-    public static String NbVisites = "0";
+    public List<String> listeTypeVisite = new ArrayList<>();
+    public List<String> listeVille = new ArrayList<>();
+    public List<String> listeDateVisite = new ArrayList<>();
+    public List<String> listePrixVisite = new ArrayList<>();
+    public String nbVisites = "0";
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
         /* Affichage de la page d'inscription */
@@ -46,17 +48,19 @@ public class Connexion extends HttpServlet {
 
         try {
 			boolean valide = informationValide(nomUtilisateur, motDePasse);
-			boolean valide2 = ConnexionBddVisite();
+			boolean valide2 = connexionBddVisite();
 			
 			if(valide == true && valide2 == true) {
 				/* Stockage du résultat et des messages d'erreur dans l'objet request */
 		        request.setAttribute( CHAMP_NOM_UTILISATEUR, nomUtilisateur );
 		        request.setAttribute( CHAMP_PASS, motDePasse );
-		        request.setAttribute("TypeVisite", TypeVisite);
-		        request.setAttribute("Ville", Ville);
-		    	request.setAttribute("DateVisite", DateVisite);
-		    	request.setAttribute("PrixVisite", PrixVisite);
-		    	request.setAttribute("NbVisites", NbVisites);
+		        
+		        request.setAttribute("TypeVisite", this.listeTypeVisite);
+		        request.setAttribute("Ville", this.listeVille);
+			    	request.setAttribute("DateVisite", this.listeDateVisite);
+			    	request.setAttribute("PrixVisite", this.listePrixVisite);
+			    	request.setAttribute("NbVisites", nbVisites);
+			    	System.out.println(this.listeTypeVisite);
 		        /* Transmission de la paire d'objets request/response à notre JSP */
 		        this.getServletContext().getRequestDispatcher( VUE ).forward( request, response );		        
 		    } else {
@@ -71,33 +75,48 @@ public class Connexion extends HttpServlet {
     /* Valide le nom d'utilisateur saisi */
     private boolean informationValide( String id, String mp ) throws ClassNotFoundException{
     		Class.forName("com.mysql.jdbc.Driver");
-        try(Connection connexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/bdd_client?user=user&password=user");
+        try(Connection connexion = DriverManager.getConnection("jdbc:mysql://localhost:8889/bdd_client?user=root&password=root");
             Statement statement = connexion.createStatement();
             ResultSet resultat = statement.executeQuery( "SELECT idUtilisateur FROM Utilisateur WHERE nomUtilisateur = '"+ id +"' and motDePasse = '"+ mp +"'" )) {
 	    	    if(resultat.next() != false) {
                     return true;
-                }
+            }
 	    	} catch ( SQLException e ) {
 	    	    /* Gérer les éventuelles erreurs ici */
 	    		e.printStackTrace();
-	    	}
-	    	
+	    	} 	
         return false;
     }
     
-    private boolean ConnexionBddVisite() throws ClassNotFoundException{
-    	Class.forName("com.mysql.jdbc.Driver");
-        try(Connection connexionVisite = DriverManager.getConnection("jdbc:mysql://localhost:3306/gestionvisites?user=user&password=user");
-            Statement statement = connexionVisite.createStatement();
-            ResultSet resultNbVisite = statement.executeQuery( "SELECT COUNT(idVisite) as nbVisites FROM visite")) {
-	    	    if(resultNbVisite.next() != false) {
-                    return true;
-                }
+    private boolean connexionBddVisite() throws ClassNotFoundException{
+		Class.forName("com.mysql.jdbc.Driver");
+	    try(Connection connexionVisite = DriverManager.getConnection("jdbc:mysql://localhost:8889/bdd_reservation?user=root&password=root");
+	    		Statement statement = connexionVisite.createStatement();
+	    		ResultSet resultat = statement.executeQuery( "SELECT typeVisite, ville, dateVisite, prixVisite FROM Visite" )){
+
+	    	
+	    	if(resultat.next() != false) {
+		    	/* Récupération des données du résultat de la requête de lecture */
+	    		System.out.println(resultat.getString("typeVisite"));
+	    		this.listeTypeVisite.add(resultat.getString("typeVisite"));
+	    		this.listeVille.add(resultat.getString("ville"));
+	    		this.listeDateVisite.add(resultat.getString("dateVisite"));
+	    		this.listePrixVisite.add(resultat.getString("prixVisite"));
+		    	while ( resultat.next() ) {
+		    		
+		    		this.listeTypeVisite.add(resultat.getString("typeVisite"));
+		    		this.listeVille.add(resultat.getString("ville"));
+		    		this.listeDateVisite.add(resultat.getString("dateVisite"));
+		    		this.listePrixVisite.add(resultat.getString("prixVisite"));
+		    		this.nbVisites = String.valueOf(this.listeTypeVisite.size());
+		    	}
+            return true;
+        }
+	    	
 	    	} catch ( SQLException e ) {
 	    	    /* Gérer les éventuelles erreurs ici */
 	    		e.printStackTrace();
-	    	}
-	    	
-        return false;
+	    	}    	
+	    return false;
     }
 }

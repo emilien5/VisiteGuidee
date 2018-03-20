@@ -23,32 +23,30 @@ Il y a  <% String NbVisites = (String) request.getAttribute("NbVisites");out.pri
             </tr>
             <tbody  >
                 <tr >
+	               	<%@ page import ="java.util.ArrayList"%>
+					<%@ page import ="java.util.List"%>
+                
+               		 <% 
+               			int nombreVistite = Integer.parseInt((String)request.getAttribute("NbVisites"));
+               		 for(int i = 0; i < nombreVistite; i++) { %>
               		<td>
-              		<% String TypeVisite = (String) request.getAttribute("TypeVisite");out.println( TypeVisite );%>
+              		<% List TypeVisite = (List) request.getAttribute("TypeVisite");
+              			out.println( TypeVisite.get(i) );%>
               		 </td>
               		 <td>
-              		<% String Ville = (String) request.getAttribute("Ville");out.println( Ville );%>
+              		<% List Ville = (List) request.getAttribute("Ville");
+              			out.println( Ville.get(i) );%>
               		 </td>
               		 <td>
-              		 <% String DateVisite = (String) request.getAttribute("DateVisite");out.println( DateVisite );%>
+              		<% List DateVisite = (List) request.getAttribute("DateVisite");
+              			out.println( DateVisite.get(i) );%>
               		 </td>
               		 <td>
-              		 <% String PrixVisite = (String) request.getAttribute("PrixVisite");out.println( PrixVisite );%>
+              		<% List PrixVisite = (List) request.getAttribute("PrixVisite");
+              		 	out.println( PrixVisite.get(i) );%>
               		 </td>
-               <%--  <% for(int i = 0; i < (int)request.getAttribute("nombreVisites"); i++) { %>
-                    <td>
-                        <% out.println((String)request.getAttribute("TypeVisite")); %>
-                    </td>
-                    <td>
-                        <% out.println((String)request.getAttribute("Ville")); %>
-                    </td>
-                    <td>
-                        <% out.println((String)request.getAttribute("Datevisite")); %>
-                    </td>
-                    <td>
-                        <% out.println((String)request.getAttribute("PrixVisite")); %>
-                    </td>
-                    <% } %> --%>
+              		 </tr>
+              		<% } %> 
                 </tr>
             </tbody>
         </table>
