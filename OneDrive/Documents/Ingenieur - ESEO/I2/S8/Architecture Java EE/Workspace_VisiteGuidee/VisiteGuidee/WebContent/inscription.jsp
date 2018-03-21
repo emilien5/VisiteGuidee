@@ -13,15 +13,11 @@
                 <legend>Inscription</legend>
                 <p>Vous pouvez vous inscrire via ce formulaire.</p>
 				
-				<label for="Nom">Nom <span class="requis">*</span></label>
+				<label for="Nom">Nom utilisateur<span class="requis">*</span></label>
                 <input type="text" id="nom" name="nom" value="" size="20" maxlength="60" />
                 <span class="erreur">${erreurs['Nom']}</span>
                 <br />
                 
-                <label for="Nom">Prenom <span class="requis">*</span></label>
-                <input type="text" id="prenom" name="prenom" value="" size="20" maxlength="60" />
-                <span class="erreur">${erreurs['Prenom']}</span>
-                <br />
 
                 <label for="motdepasse">Mot de passe <span class="requis">*</span></label>
                 <input type="password" id="motdepasse" name="motdepasse" value="" size="20" maxlength="20" />
