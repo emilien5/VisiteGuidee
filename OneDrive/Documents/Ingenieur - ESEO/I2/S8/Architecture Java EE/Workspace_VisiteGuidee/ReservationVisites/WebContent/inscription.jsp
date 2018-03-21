@@ -30,12 +30,16 @@
                 <input type="email" id="email" name="email" value="" size="20" maxlength="60" />
                 <br>
                 
+                <label for="email">Adresse <span class="requis">*</span></label>
+                <input type="adresse" id="adresse" name="adresse" value="" size="20" maxlength="60" />
+                <br>
+                
                 <label for="nom">Tél</label>
                 <input type="text" id="tel" name="tel" value="" size="20" maxlength="20" />
                 <br>
 
                 <input type="submit" value="Inscription" class="sansLabel"/>
-                	<a href="index.jsp"> Déjà un compte ?</a>
+                	<a href="index.jsp"> Retour !</a>
                 	
             </fieldset>
 		</form>

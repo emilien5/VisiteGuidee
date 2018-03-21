@@ -3,6 +3,7 @@ package servlets;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -30,6 +31,9 @@ public class InscriptionServlets extends HttpServlet {
 	    public static final String CHAMP_TEL    = "tel";
 	    public static final String ATT_ERREURS  = "erreurs";
 	    public static final String ATT_RESULTAT = "resultat";
+	    
+	    private static final String urlBddclientWindows = "jdbc:mysql://localhost:3306/bdd_client?user=user&password=user";
+	    private static final String urlBddclientMac = "jdbc:mysql://localhost:8889/bdd_client?user=root&password=root";
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -84,13 +88,17 @@ public class InscriptionServlets extends HttpServlet {
 	            resultat = "échec de l'inscription.";
 	        }
 	        
+	        try {
+				enregistrementUtilisateur(nom, motDePasse, email, adresse, tel);
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	        /* Stockage du r�sultat et des messages d'erreur dans l'objet request */
 	        request.setAttribute( ATT_ERREURS, erreurs );
 	        request.setAttribute( ATT_RESULTAT, resultat );
-	        request.setAttribute( CHAMP_NOM, nom );
-	        request.setAttribute( CHAMP_ADRESSE, adresse );
-	        request.setAttribute( CHAMP_TEL, tel );
-	        
+	        request.setAttribute( ATT_RESULTAT, resultat );
+
 	        /* Transmission de la paire d'objets request/response � notre JSP */
 	        this.getServletContext().getRequestDispatcher( VUE ).forward( request, response );        
 	    }
@@ -132,14 +140,16 @@ public class InscriptionServlets extends HttpServlet {
 	    }
 	    
 	    /* Valide le nom d'utilisateur saisi */
-	    private boolean enregistrementUtilisateur( String id, String mp ) throws ClassNotFoundException{
+	    private boolean enregistrementUtilisateur(String nom, String moDePasse, String email, String adresse, String tel) throws ClassNotFoundException{
 	    		Class.forName("com.mysql.jdbc.Driver");
-	        try(Connection connexion = DriverManager.getConnection("jdbc:mysql://localhost:8889/bdd_client?user=root&password=root");
-	            Statement statement = connexion.createStatement();
-	            ResultSet resultat = statement.executeQuery( "INSERT INTO Utilisateur(nomUtilisateur,motDePasse, email, adresse, tel) VALUES('"+CHAMP_NOM+"','"+CHAMP_PASS+"','"+CHAMP_EMAIL+"','"+CHAMP_ADRESSE+"','"+ CHAMP_TEL +"')")) {
-	        	if(resultat.next() != false) {
-	                    return true;
-	            }
+	  
+	        	try {
+	        		Connection connection = DriverManager.getConnection(urlBddclientMac);
+	        		PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Utilisateur(nomUtilisateur,motDePasse, email, adresse, tel) VALUES('"+nom+"','"+moDePasse+"','"+email+"','"+adresse+"','"+ tel +"')");
+	        		preparedStatement.executeUpdate();
+		       	if(preparedStatement.isClosed() == true) {
+		                    return true;
+		        }
 		    	} catch ( SQLException e ) {
 		    	    /* G�rer les �ventuelles erreurs ici */
 		    		e.printStackTrace();

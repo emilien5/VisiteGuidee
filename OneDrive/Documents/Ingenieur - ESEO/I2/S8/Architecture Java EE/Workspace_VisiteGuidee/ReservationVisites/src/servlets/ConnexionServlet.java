@@ -35,6 +35,8 @@ public class ConnexionServlet extends HttpServlet {
     
     public String urlBddclientWindows = "jdbc:mysql://localhost:3306/bdd_client?user=user&password=user";
     public String urlBddGestionVisitesWindows = "jdbc:mysql://localhost:3306/gestionvisites?user=user&password=user";
+    public String urlBddclientMac = "jdbc:mysql://localhost:8889/bdd_client?user=root&password=root";
+    public String urlBddGestionVisitesMac = "jdbc:mysql://localhost:8889/bdd_reservation?user=root&password=root";
     
     public List<String> listeTypeVisite = new ArrayList<>();
     public List<String> listeVille = new ArrayList<>();
@@ -74,7 +76,6 @@ public class ConnexionServlet extends HttpServlet {
 				    	request.setAttribute("DateVisite", this.listeDateVisite);
 				    	request.setAttribute("PrixVisite", this.listePrixVisite);
 				    	request.setAttribute("NbVisites", nbVisites);
-				    	System.out.println(this.listeTypeVisite);
 			        /* Transmission de la paire d'objets request/response � notre JSP */
 			        this.getServletContext().getRequestDispatcher( VUE ).forward( request, response );		        
 				
@@ -91,7 +92,7 @@ public class ConnexionServlet extends HttpServlet {
 	    /* Valide le nom d'utilisateur saisi */
 	    private boolean informationValide( String id, String mp ) throws ClassNotFoundException{
 	    		Class.forName("com.mysql.jdbc.Driver");
-	        try(Connection connexion = DriverManager.getConnection(urlBddclientWindows);
+	        try(Connection connexion = DriverManager.getConnection(urlBddclientMac);
 	            Statement statement = connexion.createStatement();
 	            ResultSet resultat = statement.executeQuery( "SELECT idUtilisateur FROM Utilisateur WHERE nomUtilisateur = '"+ id +"' and motDePasse = '"+ mp +"'" )) {
 		    	    if(resultat.next() != false) {
@@ -106,7 +107,7 @@ public class ConnexionServlet extends HttpServlet {
 	    
 	    private boolean connexionBddVisite() throws ClassNotFoundException{
 			Class.forName("com.mysql.jdbc.Driver");
-		    try(Connection connexionVisite = DriverManager.getConnection(urlBddGestionVisitesWindows);
+		    try(Connection connexionVisite = DriverManager.getConnection(urlBddGestionVisitesMac);
 		    		Statement statement = connexionVisite.createStatement();
 		    		ResultSet resultat = statement.executeQuery( "SELECT typeVisite, ville, dateVisite, prixVisite FROM Visite" )){
 

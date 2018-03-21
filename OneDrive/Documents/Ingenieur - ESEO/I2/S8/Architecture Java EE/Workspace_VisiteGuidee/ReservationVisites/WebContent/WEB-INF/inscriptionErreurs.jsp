@@ -8,7 +8,7 @@
         <link type="text/css" rel="stylesheet" href="form.css" />
     </head>
     <body>
- <form method="post" action="inscription">
+ <form method="post" action="InscriptionServlets">
 	    <fieldset>
                 <legend>Inscription</legend>
                 <p>Vous pouvez vous inscrire via ce formulaire.</p>
@@ -33,13 +33,18 @@
                 <span class="erreur">${erreurs['email']}</span>
                 <br />
                 
+                <label for="email">Adresse <span class="requis">*</span></label>
+                <input type="adresse" id="adresse" name="adresse" value="" size="20" maxlength="60" />
+                <span class="erreur">${erreurs['adresse']}</span>
+                <br>
+                
                 <label for="nom">Tél</label>
                 <input type="text" id="tel" name="tel" value="" size="20" maxlength="20" />
                 <br />
 
 
                 <input type="submit" value="Inscription" class="sansLabel" />
-                <a href="connexion.jsp"> Déjà un compte ?</a>
+                <a href="index.jsp"> Retour !</a>
                 <br />
                 <br />
                 <p class="${empty erreurs ? 'succes' : 'erreur'}">${resultat}</p>
