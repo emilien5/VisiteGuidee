@@ -3,6 +3,7 @@ package servlets;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
@@ -25,7 +26,7 @@ public class Inscription extends HttpServlet {
     public static final String CHAMP_PASS   = "motdepasse";
     public static final String CHAMP_CONF   = "confirmation";
     public static final String CHAMP_NOM    = "nom";
-    public static final String CHAMP_PRENOM    = "prenom";
+    public static final String CHAMP_ADRESSE    = "adresse";
     public static final String CHAMP_TEL    = "tel";
     public static final String ATT_ERREURS  = "erreurs";
     public static final String ATT_RESULTAT = "resultat";
@@ -44,7 +45,7 @@ public class Inscription extends HttpServlet {
         String motDePasse = request.getParameter( CHAMP_PASS );
         String confirmation = request.getParameter( CHAMP_CONF );
         String nom = request.getParameter( CHAMP_NOM );
-        String prenom = request.getParameter( CHAMP_PRENOM );
+        String adresse = request.getParameter( CHAMP_ADRESSE );
         String tel = request.getParameter( CHAMP_TEL );
  
         
@@ -76,24 +77,11 @@ public class Inscription extends HttpServlet {
             resultat = "Échec de l'inscription.";
         }
         
-        /**
-         *  Insertion de l'utilisateur dans la base de données
-         */
-  /*      try {
-        	DriverManager.registerDriver(new com.mysql.jdbc.Driver());
-        	Connection db = DriverManager.getConnection("jdbc:mysql://localhost/VisiteGuidee?user=admin&password=network");
-        	Statement stmt = db.createStatement();
-        	stmt.executeQuery("INSERT INTO Utilisateur(NomUtilisateur,email,motDePasse) VALUES("+nom+","+email+","+motDePasse+")");
-        } catch (SQLException e) {
-        	e.printStackTrace();
-        }	
-*/
-        
         /* Stockage du résultat et des messages d'erreur dans l'objet request */
         request.setAttribute( ATT_ERREURS, erreurs );
         request.setAttribute( ATT_RESULTAT, resultat );
         request.setAttribute( CHAMP_NOM, nom );
-        request.setAttribute( CHAMP_PRENOM, prenom );
+        request.setAttribute( CHAMP_ADRESSE, adresse );
         request.setAttribute( CHAMP_TEL, tel );
         
         /* Transmission de la paire d'objets request/response à notre JSP */
@@ -112,7 +100,6 @@ public class Inscription extends HttpServlet {
             throw new Exception( "Merci de saisir une adresse mail." );
         }
     }
-
     /**
      * Valide les mots de passe saisis.
      */
@@ -137,5 +124,19 @@ public class Inscription extends HttpServlet {
         }
     }
     
-   
+    /* Valide le nom d'utilisateur saisi */
+    private boolean enregistrementUtilisateur( String id, String mp ) throws ClassNotFoundException{
+    		Class.forName("com.mysql.jdbc.Driver");
+        try(Connection connexion = DriverManager.getConnection("jdbc:mysql://localhost:8889/bdd_client?user=root&password=root");
+            Statement statement = connexion.createStatement();
+            ResultSet resultat = statement.executeQuery( "INSERT INTO Utilisateur(nomUtilisateur,motDePasse, email, adresse, tel) VALUES('"+CHAMP_NOM+"','"+CHAMP_PASS+"','"+CHAMP_EMAIL+"','"+CHAMP_ADRESSE+"','"+ CHAMP_TEL +"')")) {
+        	if(resultat.next() != false) {
+                    return true;
+            }
+	    	} catch ( SQLException e ) {
+	    	    /* Gérer les éventuelles erreurs ici */
+	    		e.printStackTrace();
+	    	} 	
+        return false;
+    }
 }

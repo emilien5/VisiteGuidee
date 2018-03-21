@@ -97,7 +97,6 @@ public class Connexion extends HttpServlet {
 	    	
 	    	if(resultat.next() != false) {
 		    	/* Récupération des données du résultat de la requête de lecture */
-	    		System.out.println(resultat.getString("typeVisite"));
 	    		this.listeTypeVisite.add(resultat.getString("typeVisite"));
 	    		this.listeVille.add(resultat.getString("ville"));
 	    		this.listeDateVisite.add(resultat.getString("dateVisite"));
