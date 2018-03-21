@@ -55,7 +55,7 @@ public class ConnexionServlet extends HttpServlet {
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		 Map<String, String> erreurs = new HashMap<>();
 
-	        /* Récupération des champs du formulaire. */
+	        /* Rï¿½cupï¿½ration des champs du formulaire. */
 	        nomUtilisateur = request.getParameter( CHAMP_NOM_UTILISATEUR );
 	        motDePasse = request.getParameter( CHAMP_PASS );
 
@@ -64,7 +64,7 @@ public class ConnexionServlet extends HttpServlet {
 				boolean valide2 = connexionBddVisite();
 				
 				if(valide == true && valide2 == true) {
-					/* Stockage du résultat et des messages d'erreur dans l'objet request */
+					/* Stockage du rï¿½sultat et des messages d'erreur dans l'objet request */
 			        request.setAttribute( CHAMP_NOM_UTILISATEUR, nomUtilisateur );
 			        request.setAttribute( CHAMP_PASS, motDePasse );
 			        
@@ -74,7 +74,7 @@ public class ConnexionServlet extends HttpServlet {
 				    	request.setAttribute("PrixVisite", this.listePrixVisite);
 				    	request.setAttribute("NbVisites", nbVisites);
 				    	System.out.println(this.listeTypeVisite);
-			        /* Transmission de la paire d'objets request/response à notre JSP */
+			        /* Transmission de la paire d'objets request/response ï¿½ notre JSP */
 			        this.getServletContext().getRequestDispatcher( VUE ).forward( request, response );		        
 			    } else {
 					this.getServletContext().getRequestDispatcher( VUE_ERREUR ).forward( request, response );
@@ -88,14 +88,14 @@ public class ConnexionServlet extends HttpServlet {
 	    /* Valide le nom d'utilisateur saisi */
 	    private boolean informationValide( String id, String mp ) throws ClassNotFoundException{
 	    		Class.forName("com.mysql.jdbc.Driver");
-	        try(Connection connexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/bdd_client?user=root&password=");
+	        try(Connection connexion = DriverManager.getConnection(urlBddclientWindows);
 	            Statement statement = connexion.createStatement();
 	            ResultSet resultat = statement.executeQuery( "SELECT idUtilisateur FROM Utilisateur WHERE nomUtilisateur = '"+ id +"' and motDePasse = '"+ mp +"'" )) {
 		    	    if(resultat.next() != false) {
 	                    return true;
 	            }
 		    	} catch ( SQLException e ) {
-		    	    /* Gérer les éventuelles erreurs ici */
+		    	    /* Gï¿½rer les ï¿½ventuelles erreurs ici */
 		    		e.printStackTrace();
 		    	} 	
 	        return false;
@@ -103,13 +103,17 @@ public class ConnexionServlet extends HttpServlet {
 	    
 	    private boolean connexionBddVisite() throws ClassNotFoundException{
 			Class.forName("com.mysql.jdbc.Driver");
-		    try(Connection connexionVisite = DriverManager.getConnection("jdbc:mysql://localhost:3306/gestionvisites?user=root&password=");
+		    try(Connection connexionVisite = DriverManager.getConnection(urlBddGestionVisitesWindows);
 		    		Statement statement = connexionVisite.createStatement();
 		    		ResultSet resultat = statement.executeQuery( "SELECT typeVisite, ville, dateVisite, prixVisite FROM Visite" )){
 
 		    	
 		    	if(resultat.next() != false) {
-			    	/* Récupération des données du résultat de la requête de lecture */
+			    	/* Rï¿½cupï¿½ration des donnï¿½es du rï¿½sultat de la requï¿½te de lecture */
+		    		this.listeTypeVisite.clear();
+		    		this.listePrixVisite.clear();
+		    		this.listeDateVisite.clear();
+		    		this.listeVille.clear();
 		    		this.listeTypeVisite.add(resultat.getString("typeVisite"));
 		    		this.listeVille.add(resultat.getString("ville"));
 		    		this.listeDateVisite.add(resultat.getString("dateVisite"));
@@ -126,7 +130,7 @@ public class ConnexionServlet extends HttpServlet {
 	        }
 		    	
 		    	} catch ( SQLException e ) {
-		    	    /* Gérer les éventuelles erreurs ici */
+		    	    /* Gï¿½rer les ï¿½ventuelles erreurs ici */
 		    		e.printStackTrace();
 		    	}    	
 		    return false;

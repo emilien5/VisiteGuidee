@@ -8,7 +8,7 @@
         <link type="text/css" rel="stylesheet" href="form.css" />
     </head>
     <body>
-         <form method="post" action="Connexion">
+         <form method="post" action="ConnexionServlet">
          <div>
 	    <fieldset>
                 <legend>Connexion</legend>
@@ -21,8 +21,8 @@
                 <input type="password" id="motdepasse" name="motdepasse" value="" size="20" maxlength="20" />
                 <br />                
              
-                <input type="submit" value="Connection" class="sansLabel" />
-               	<a href="inscription.jsp">Pas de compte ?</a>
+                <input type="submit" value="Connexion" class="sansLabel" />
+               	<a href="WEB-INF/inscription.jsp">Pas de compte ?</a>
                 
                 <br />                     
             </fieldset>

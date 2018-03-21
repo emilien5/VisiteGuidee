@@ -58,6 +58,6 @@ Il y a  <% String NbVisites = (String) request.getAttribute("NbVisites");out.pri
 <br>
 
 <br>
-<a href="connexion.jsp">Déconnexion</a>
+<a href="index.jsp">Déconnexion</a>
 </body>
 </html>
