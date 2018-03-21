@@ -28,7 +28,8 @@ public class ConnexionServlet extends HttpServlet {
 	private String motDePasse;
     
 	public static final String VUE = "/WEB-INF/reservation.jsp";
-	public static final String VUE_ERREUR = "/WEB-INF/connexionErreur.jsp";
+	public static final String VUE_ERREUR = "/WEB-INF/connexionErreurs.jsp";
+	public static final String VUE_INSCRIPTION = "/WEB-INF/inscription.jsp";
     public static final String CHAMP_NOM_UTILISATEUR = "nom";
     public static final String CHAMP_PASS = "motdepasse";
     
@@ -54,7 +55,7 @@ public class ConnexionServlet extends HttpServlet {
 	 */
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		 Map<String, String> erreurs = new HashMap<>();
-
+		 	
 	        /* R�cup�ration des champs du formulaire. */
 	        nomUtilisateur = request.getParameter( CHAMP_NOM_UTILISATEUR );
 	        motDePasse = request.getParameter( CHAMP_PASS );
@@ -76,7 +77,8 @@ public class ConnexionServlet extends HttpServlet {
 				    	System.out.println(this.listeTypeVisite);
 			        /* Transmission de la paire d'objets request/response � notre JSP */
 			        this.getServletContext().getRequestDispatcher( VUE ).forward( request, response );		        
-			    } else {
+				
+				} else {
 					this.getServletContext().getRequestDispatcher( VUE_ERREUR ).forward( request, response );
 				}
 			} catch (Exception e) {

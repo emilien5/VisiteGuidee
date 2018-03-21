@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
  <title>Inscription</title>
-        <link type="text/css" rel="stylesheet" href="../form.css" />
+        <link type="text/css" rel="stylesheet" href="form.css" />
     </head>
     <body>
     Coucou
@@ -39,7 +39,7 @@
                 <br />
 
                 <input type="submit" value="Inscription" class="sansLabel"/>
-                <a href="connexion.jsp"> Déjà un compte ?</a>
+                <a href="index.jsp"> Déjà un compte ?</a>
             </fieldset>
             </form>
             </div>

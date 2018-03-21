@@ -24,7 +24,7 @@
                 <br />                
              
                 <input type="submit" value="Connection" class="sansLabel" />
-               	<a href="Inscription.jsp">Pas de compte ?</a>
+               	<a href="inscription.jsp">Pas de compte ?</a>
                 
                 <br />                     
                 <p class="${empty erreurs ? 'succes' : 'erreur'}">${resultat}</p>

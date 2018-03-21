@@ -15,16 +15,22 @@
                 <p>Vous pouvez vous connecter via ce formulaire.</p>
 				<label for="nom">Nom d'utilisateur</label>
                 <input type="text" id="nom" name="nom" value="" size="20" maxlength="20" />
+                <span class="erreur">${erreurs['nom']}</span>
                 <br />
 
                 <label for="motdepasse">Mot de passe <span class="requis">*</span></label>
                 <input type="password" id="motdepasse" name="motdepasse" value="" size="20" maxlength="20" />
+                <span class="erreur">${erreurs['motdepasse']}</span>
                 <br />                
              
-                <input type="submit" value="Connexion" class="sansLabel" />
-               	<a href="WEB-INF/inscription.jsp">Pas de compte ?</a>
-                
+                <input type="submit" value="Connection" class="sansLabel" />
+               	<a href="inscription.jsp">Pas de compte ?</a>
+             
                 <br />                     
+                <p class="${empty erreurs ? 'succes' : 'erreur'}">${resultat}</p>
+         
+                
+                            
             </fieldset>
             </div>
         </form>

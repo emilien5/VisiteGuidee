@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/InscriptionServlets")
 public class InscriptionServlets extends HttpServlet {
 		private static final long serialVersionUID = 1L;
-		public static final String VUE          = "/WEB-INF/InscriptionErreurs.jsp";
+		public static final String VUE          = "/WEB-INF/inscriptionErreurs.jsp";
 	    public static final String CHAMP_EMAIL  = "email";
 	    public static final String CHAMP_PASS   = "motdepasse";
 	    public static final String CHAMP_CONF   = "confirmation";
@@ -47,7 +47,7 @@ public class InscriptionServlets extends HttpServlet {
 		 String resultat;
 	        Map<String, String> erreurs = new HashMap<String, String>();
 
-	        /* Récupération des champs du formulaire. */
+	        /* Rï¿½cupï¿½ration des champs du formulaire. */
 	        String email = request.getParameter( CHAMP_EMAIL );
 	        String motDePasse = request.getParameter( CHAMP_PASS );
 	        String confirmation = request.getParameter( CHAMP_CONF );
@@ -77,21 +77,21 @@ public class InscriptionServlets extends HttpServlet {
 	            erreurs.put( CHAMP_NOM, e.getMessage() );
 	        }
 
-	        /* Initialisation du résultat global de la validation. */
+	        /* Initialisation du rï¿½sultat global de la validation. */
 	        if ( erreurs.isEmpty() ) {
-	            resultat = "Succès de l'inscription.";
+	            resultat = "Succï¿½s de l'inscription.";
 	        } else {
-	            resultat = "Échec de l'inscription.";
+	            resultat = "ï¿½chec de l'inscription.";
 	        }
 	        
-	        /* Stockage du résultat et des messages d'erreur dans l'objet request */
+	        /* Stockage du rï¿½sultat et des messages d'erreur dans l'objet request */
 	        request.setAttribute( ATT_ERREURS, erreurs );
 	        request.setAttribute( ATT_RESULTAT, resultat );
 	        request.setAttribute( CHAMP_NOM, nom );
 	        request.setAttribute( CHAMP_ADRESSE, adresse );
 	        request.setAttribute( CHAMP_TEL, tel );
 	        
-	        /* Transmission de la paire d'objets request/response à notre JSP */
+	        /* Transmission de la paire d'objets request/response ï¿½ notre JSP */
 	        this.getServletContext().getRequestDispatcher( VUE ).forward( request, response );        
 	    }
 
@@ -113,9 +113,9 @@ public class InscriptionServlets extends HttpServlet {
 	    private void validationMotsDePasse( String motDePasse, String confirmation ) throws Exception{
 	        if (motDePasse != null && motDePasse.trim().length() != 0 && confirmation != null && confirmation.trim().length() != 0) {
 	            if (!motDePasse.equals(confirmation)) {
-	                throw new Exception("Les mots de passe entrés sont différents, merci de les saisir à nouveau.");
+	                throw new Exception("Les mots de passe entrï¿½s sont diffÃ©rents, merci de les saisir Ã  nouveau.");
 	            } else if (motDePasse.trim().length() < 3) {
-	                throw new Exception("Les mots de passe doivent contenir au moins 3 caractères.");
+	                throw new Exception("Les mots de passe doivent contenir au moins 3 caractÃ¨res.");
 	            }
 	        } else {
 	            throw new Exception("Merci de saisir et confirmer votre mot de passe.");
@@ -127,7 +127,7 @@ public class InscriptionServlets extends HttpServlet {
 	     */
 	    private void validationNom( String nom ) throws Exception {
 	        if ( nom != null && nom.trim().length() < 3 ) {
-	            throw new Exception( "Le nom d'utilisateur doit contenir au moins 3 caractères." );
+	            throw new Exception( "Le nom d'utilisateur doit contenir au moins 3 caractÃ©res." );
 	        }
 	    }
 	    
@@ -141,7 +141,7 @@ public class InscriptionServlets extends HttpServlet {
 	                    return true;
 	            }
 		    	} catch ( SQLException e ) {
-		    	    /* Gérer les éventuelles erreurs ici */
+		    	    /* Gï¿½rer les ï¿½ventuelles erreurs ici */
 		    		e.printStackTrace();
 		    	} 	
 	        return false;
