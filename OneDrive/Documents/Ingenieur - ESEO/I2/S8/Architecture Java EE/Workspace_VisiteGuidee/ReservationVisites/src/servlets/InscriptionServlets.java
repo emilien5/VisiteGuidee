@@ -79,9 +79,9 @@ public class InscriptionServlets extends HttpServlet {
 
 	        /* Initialisation du r�sultat global de la validation. */
 	        if ( erreurs.isEmpty() ) {
-	            resultat = "Succ�s de l'inscription.";
+	            resultat = "Succès de l'inscription.";
 	        } else {
-	            resultat = "�chec de l'inscription.";
+	            resultat = "échec de l'inscription.";
 	        }
 	        
 	        /* Stockage du r�sultat et des messages d'erreur dans l'objet request */

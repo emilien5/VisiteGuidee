@@ -15,7 +15,7 @@
 
                 <label for="Nom">Nom utilisateur<span class="requis">*</span></label>
                 <input type="text" id="nom" name="nom" value="" size="20" maxlength="60" />
-                <span class="erreur">${erreurs['Nom']}</span>
+                <span class="erreur">${erreurs['nom']}</span>
                 <br />
 
                 <label for="motdepasse">Mot de passe <span class="requis">*</span></label>

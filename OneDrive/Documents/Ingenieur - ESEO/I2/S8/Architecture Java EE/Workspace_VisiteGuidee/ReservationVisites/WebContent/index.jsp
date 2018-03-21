@@ -6,31 +6,27 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <title>Inscription</title>
         <link type="text/css" rel="stylesheet" href="form.css" />
-    </head>
+</head>
     <body>
          <form method="post" action="ConnexionServlet">
          <div>
-	    <fieldset>
+	     <fieldset>
                 <legend>Connexion</legend>
+                
                 <p>Vous pouvez vous connecter via ce formulaire.</p>
 				<label for="nom">Nom d'utilisateur</label>
-                <input type="text" id="nom" name="nom" value="" size="20" maxlength="20" />
-                <span class="erreur">${erreurs['nom']}</span>
-                <br />
+                	<input type="text" id="nom" name="nom" value="" size="20" maxlength="20" />
+                <br>
+        
 
                 <label for="motdepasse">Mot de passe <span class="requis">*</span></label>
-                <input type="password" id="motdepasse" name="motdepasse" value="" size="20" maxlength="20" />
-                <span class="erreur">${erreurs['motdepasse']}</span>
-                <br />                
+                	<input type="password" id="motdepasse" name="motdepasse" value="" size="20" maxlength="20" />
+                <br>                
              
                 <input type="submit" value="Connection" class="sansLabel" />
-               	<a href="inscription.jsp">Pas de compte ?</a>
-             
-                <br />                     
-                <p class="${empty erreurs ? 'succes' : 'erreur'}">${resultat}</p>
-         
-                
-                            
+               		<a href="inscription.jsp">Pas de compte ?</a>
+                <br>              
+          
             </fieldset>
             </div>
         </form>

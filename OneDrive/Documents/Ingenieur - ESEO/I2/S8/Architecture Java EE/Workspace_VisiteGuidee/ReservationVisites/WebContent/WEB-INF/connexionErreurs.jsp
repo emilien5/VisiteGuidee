@@ -22,7 +22,8 @@
                 <input type="password" id="motdepasse" name="motdepasse" value="" size="20" maxlength="20" />
                 <span class="erreur">${erreurs['motdepasse']}</span>
                 <br />                
-             
+             	
+             	<p><font color="red">Le nom d'utilisateur ou mot de passe est incorrect.</font></p>
                 <input type="submit" value="Connection" class="sansLabel" />
                	<a href="inscription.jsp">Pas de compte ?</a>
                 

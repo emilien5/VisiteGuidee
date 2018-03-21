@@ -80,6 +80,7 @@ public class ConnexionServlet extends HttpServlet {
 				
 				} else {
 					this.getServletContext().getRequestDispatcher( VUE_ERREUR ).forward( request, response );
+					
 				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
