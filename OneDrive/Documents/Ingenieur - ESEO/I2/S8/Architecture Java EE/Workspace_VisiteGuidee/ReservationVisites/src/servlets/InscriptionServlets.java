@@ -48,7 +48,7 @@ public class InscriptionServlets extends HttpServlet {
 	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		 String resultat;
+		 	String resultat;
 	        Map<String, String> erreurs = new HashMap<String, String>();
 
 	        /* R�cup�ration des champs du formulaire. */
@@ -88,12 +88,15 @@ public class InscriptionServlets extends HttpServlet {
 	            resultat = "échec de l'inscription.";
 	        }
 	        
-	        try {
-				enregistrementUtilisateur(nom, motDePasse, email, adresse, tel);
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+	        if(!resultat.equals("échec de l'inscription.")) {
+		        try {
+					enregistrementUtilisateur(nom, motDePasse, email, adresse, tel);
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	        }
+	        
 	        /* Stockage du r�sultat et des messages d'erreur dans l'objet request */
 	        request.setAttribute( ATT_ERREURS, erreurs );
 	        request.setAttribute( ATT_RESULTAT, resultat );
@@ -142,7 +145,6 @@ public class InscriptionServlets extends HttpServlet {
 	    /* Valide le nom d'utilisateur saisi */
 	    private boolean enregistrementUtilisateur(String nom, String moDePasse, String email, String adresse, String tel) throws ClassNotFoundException{
 	    		Class.forName("com.mysql.jdbc.Driver");
-	  
 	        	try {
 	        		Connection connection = DriverManager.getConnection(urlBddclientMac);
 	        		PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Utilisateur(nomUtilisateur,motDePasse, email, adresse, tel) VALUES('"+nom+"','"+moDePasse+"','"+email+"','"+adresse+"','"+ tel +"')");
