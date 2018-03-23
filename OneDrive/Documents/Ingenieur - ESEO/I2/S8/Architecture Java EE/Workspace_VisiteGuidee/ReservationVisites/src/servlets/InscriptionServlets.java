@@ -146,7 +146,7 @@ public class InscriptionServlets extends HttpServlet {
 	    private boolean enregistrementUtilisateur(String nom, String moDePasse, String email, String adresse, String tel) throws ClassNotFoundException{
 	    		Class.forName("com.mysql.jdbc.Driver");
 	        	try {
-	        		Connection connection = DriverManager.getConnection(urlBddclientMac);
+	        		Connection connection = DriverManager.getConnection(urlBddclientWindows);
 	        		PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Utilisateur(nomUtilisateur,motDePasse, email, adresse, tel) VALUES('"+nom+"','"+moDePasse+"','"+email+"','"+adresse+"','"+ tel +"')");
 	        		preparedStatement.executeUpdate();
 		       	if(preparedStatement.isClosed() == true) {

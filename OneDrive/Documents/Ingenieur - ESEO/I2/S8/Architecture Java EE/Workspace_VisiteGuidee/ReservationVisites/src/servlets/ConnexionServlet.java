@@ -92,7 +92,7 @@ public class ConnexionServlet extends HttpServlet {
 	    /* Valide le nom d'utilisateur saisi */
 	    private boolean informationValide( String id, String mp ) throws ClassNotFoundException{
 	    		Class.forName("com.mysql.jdbc.Driver");
-	        try(Connection connexion = DriverManager.getConnection(urlBddclientMac);
+	        try(Connection connexion = DriverManager.getConnection(urlBddclientWindows);
 	            Statement statement = connexion.createStatement();
 	            ResultSet resultat = statement.executeQuery( "SELECT idUtilisateur FROM Utilisateur WHERE nomUtilisateur = '"+ id +"' and motDePasse = '"+ mp +"'" )) {
 		    	    if(resultat.next() != false) {
@@ -107,11 +107,10 @@ public class ConnexionServlet extends HttpServlet {
 	    
 	    private boolean connexionBddVisite() throws ClassNotFoundException{
 			Class.forName("com.mysql.jdbc.Driver");
-		    try(Connection connexionVisite = DriverManager.getConnection(urlBddGestionVisitesMac);
+		    try(Connection connexionVisite = DriverManager.getConnection(urlBddGestionVisitesWindows);
 		    		Statement statement = connexionVisite.createStatement();
 		    		ResultSet resultat = statement.executeQuery( "SELECT typeVisite, ville, dateVisite, prixVisite FROM Visite" )){
 
-		    	
 		    	if(resultat.next() != false) {
 			    	/* R�cup�ration des donn�es du r�sultat de la requ�te de lecture */
 		    		this.listeTypeVisite.clear();

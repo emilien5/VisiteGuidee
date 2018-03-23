@@ -16,14 +16,15 @@
 	Choisissez vos visites parmis les  <% String NbVisites = (String) request.getAttribute("NbVisites");out.println( NbVisites );%> visites disponibles :
 	<br>
 	<br>
+	<form method="post"  action="ValiderRechercheServlet">
 	<b>TYPE :</b>
 	<div class="custom-select" style="width:200px;">
 	<select name="Type">	
-  		<option value="Familliale">Familliale</option>
- 		<option value="Culturel">Culturel</option>
-  		<option value="Gastronomique">Gastronomique</option>
-  		<option value="MAIS NON ?!">MAIS NON ?!</option>
-  		<option value="chocolatine">Chocolatine</option>
+  		<option value="Familliale">None</option>
+  		<% int nombreTypes = Integer.parseInt((String)request.getAttribute("nombreTypes"));
+               		 for(int i = 0; i < nombreTypes; i++) { %>
+ 		<option value="Type"><% List Types = (List) request.getAttribute("Types");out.println( Types.get(i) );%></option>
+	<% } %> 
 	</select>
 	</div>
 	
@@ -32,11 +33,11 @@
 	<b>VILLE :</b>
 	<div class="custom-select" style="width:200px;">	
 	<select name="Ville">
-  		<option value="Angers">Angers</option>
- 		<option value="Brive-la-gaillarde">Brive-la-gaillarde</option>
-  		<option value="Cosnac">Cosnac</option>
-  		<option value="MAIS NON ?!">MAIS NON ?!</option>
-  		<option value="chocolatine">Chocolatine</option>
+  		<option value="Angers">None</option>
+  		<% int nombreVilles = Integer.parseInt((String)request.getAttribute("nombreVilles"));
+               		 for(int i = 0; i < nombreVilles; i++) { %>
+ 		<option value="Ville"><% List Villes = (List) request.getAttribute("Villes");out.println( Villes.get(i) );%></option>
+	<% } %> 
 	</select>
 	</div>
 	<br>
@@ -44,11 +45,11 @@
 	<b>PRIX MAXIMUM :</b>
 	<div class="custom-select" style="width:200px;">
 	<select name="Prix">
-  		<option value="25">25 euros</option>
- 		<option value="50">50 euros</option>
-  		<option value="75">75 euros</option>
-  		<option value="100">100 euros</option>
-  		<option value="Chocolatine">Chocolatine</option>
+  		<option value="25">None</option>
+ 		<option value="50">25 euros</option>
+  		<option value="75">50 euros</option>
+  		<option value="100">75 euros</option>
+  		<option value="Chocolatine">100 euros</option>
 	</select>
 	</div>
 	
@@ -58,6 +59,8 @@
 	<br>
 	<br>
 	<input type="submit" value="Valider" id="Valider">
+	</form>
+	
 	<br>
 	<br>
 	<table border="1" id="visite">
