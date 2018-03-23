@@ -12,7 +12,7 @@
 	<br>
 	<br>
 
-<form method="post"  action="ValiderReservationServlet">
+<form method="post"  action="ValiderPaiementServlet">
 	<br>
 	<br>
 	<table border="1" id="visite">
