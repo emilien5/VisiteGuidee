@@ -31,6 +31,9 @@ public class ValiderReservationServlet extends HttpServlet {
 		String nomUtilisateur = request.getParameter("nom");
 		String motDePasse = request.getParameter("motdepasse");
 		
+		// faire requete pour recuperer les reservations de l'utilisateur connecte //
+		// ajouter les valeur a des listes type ville date prix //
+		// envoyer les donnees dans un jsp et rediriger vers la page de paiement //
 		
 	}
 

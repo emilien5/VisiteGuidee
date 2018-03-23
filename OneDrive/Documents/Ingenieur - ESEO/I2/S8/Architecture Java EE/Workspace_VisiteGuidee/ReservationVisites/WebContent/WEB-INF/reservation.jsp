@@ -61,6 +61,7 @@
 	<input type="submit" value="Valider" id="Valider">
 	</form>
 	
+	<form method="post"  action="ValiderReservationServlet">
 	<br>
 	<br>
 	<table border="1" id="visite">
@@ -84,8 +85,8 @@
               		 </td>
               		 
               		<td>
-              			<% List TypeVisite = (List) request.getAttribute("TypeVisite");
-              				out.println( TypeVisite.get(i) );%>
+              		<% List TypeVisite = (List) request.getAttribute("TypeVisite");
+              			out.println( TypeVisite.get(i) );%>
               		 </td>
               		 
               		 <td>
@@ -109,10 +110,11 @@
 			</tbody>
 	</table>
 	<br>
-	<input type="submit" value="Réserver" id="Réserver">
+	<input type="submit" value="Reserver" id="Reserver">
 	<br>
 	<br>
 		<a href="index.jsp">Déconnexion</a>
+	</form>
 <script>
 var x, i, j, selElmnt, a, b, c;
 /*look for any elements with the class "custom-select":*/
