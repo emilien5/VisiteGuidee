@@ -21,8 +21,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import jee.GestionVisiteSEI;
 import jee.GestionVisiteService;
-import jee.TrouverVisite;
-import jee.TrouverVisiteResponse;
 import jee.Visite;
 
 /**
@@ -34,6 +32,9 @@ public class ConnexionServlet extends HttpServlet {
 
 	private String nomUtilisateur;
 	private String motDePasse;
+	
+	private String typeSelectionne;
+	private String villeSelectionnee;
     
 	public static final String VUE = "/WEB-INF/reservation.jsp";
 	public static final String VUE_ERREUR = "/WEB-INF/connexionErreurs.jsp";
@@ -76,17 +77,24 @@ public class ConnexionServlet extends HttpServlet {
 		 Map<String, String> erreurs = new HashMap<>();
 		 	
 	        /* R�cup�ration des champs du formulaire. */
-	        nomUtilisateur = request.getParameter( CHAMP_NOM_UTILISATEUR );
-	        motDePasse = request.getParameter( CHAMP_PASS );
+	        nomUtilisateur = request.getParameter(CHAMP_NOM_UTILISATEUR);
+	        motDePasse = request.getParameter(CHAMP_PASS);
+	        
+	        if(request.getParameter(CHAMP_NOM_UTILISATEUR) == null || request.getParameter(CHAMP_PASS) == null) {
+		        nomUtilisateur = request.getParameter("user");
+		        motDePasse = request.getParameter("password");
+	        }
 
+	        if(request.getParameter("Type") != null) typeSelectionne = request.getParameter("Type");
+	        if(request.getParameter("Ville") != null) villeSelectionnee = request.getParameter("Ville");
+	        
 	        try {
-				boolean valide = informationValide(nomUtilisateur, motDePasse);
-				remplissageListes();
+				boolean valide = informationValide(nomUtilisateur, motDePasse);				remplissageListes();
 				
-				if(valide == true ) {
+				if(valide == true) {
 					/* Stockage du résultat et des messages d'erreur dans l'objet request */
-			        request.setAttribute( CHAMP_NOM_UTILISATEUR, nomUtilisateur );
-			        request.setAttribute( CHAMP_PASS, motDePasse );		
+			        request.setAttribute(CHAMP_NOM_UTILISATEUR, nomUtilisateur);
+			        request.setAttribute(CHAMP_PASS, motDePasse);		
 			        
 			        request.setAttribute("TypeVisite", this.listeTypeVisite);
 			        request.setAttribute("Ville", this.listeVille);
@@ -104,7 +112,6 @@ public class ConnexionServlet extends HttpServlet {
 				    
 			        /* Transmission de la paire d'objets request/response à notre JSP */
 			        this.getServletContext().getRequestDispatcher( VUE ).forward( request, response );		        
-				
 				} else {
 					this.getServletContext().getRequestDispatcher( VUE_ERREUR ).forward( request, response );
 					
@@ -137,7 +144,13 @@ public class ConnexionServlet extends HttpServlet {
 	    	uneVisite.setPrixVisite(0);
 	    	uneVisite.setTypeVisite("none");
 	    	uneVisite.setVille("none");
-	    		    	
+	    	
+	    	if(this.typeSelectionne != null) uneVisite.setTypeVisite(this.typeSelectionne);
+	    	if(this.villeSelectionnee != null) uneVisite.setVille(this.villeSelectionnee);
+	    	
+	    	System.out.println(this.typeSelectionne);
+	    	System.out.println(this.villeSelectionnee);
+	    	
 	    	GestionVisiteService service = new GestionVisiteService();
 	    	GestionVisiteSEI port = service.getGestionVisitePort();
 	    	listeVisite = (ArrayList<Visite>) port.trouverVisite(uneVisite);

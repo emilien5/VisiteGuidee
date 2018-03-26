@@ -16,24 +16,29 @@
 	Choisissez vos visites parmis les  <% int NbVisites = (int) request.getAttribute("NbVisites");out.println( NbVisites );%> visites disponibles :
 	<br>
 	<br>
-	<form method="post"  action="ValiderRechercheServlet">
+	
+	<form method="post"  action="ConnexionServlet">
+	<% String user = (String) request.getAttribute("nom");%>
+	<% String password = (String) request.getAttribute("motdepasse");%>
+	<input id="user" name="user" type="hidden" value="<%=user%>">
+	<input id="password" name="password" type="hidden" value="<%=password%>">
+	
 	<b>TYPE :</b>
-	<select name="Type">	
-  		<option value="Familliale">None</option>
+	<select name="Type" id="Type">	
+  		<option value="none">None</option>
   		<% int nombreTypes = (int) request.getAttribute("tailleListeTypes");
                		 for(int i = 0; i < nombreTypes; i++) { %>
- 		<option value="Type"><% List nomTypes = (List) request.getAttribute("nomTypes");
+ 		<option ><% List nomTypes = (List) request.getAttribute("nomTypes");
               			out.println( nomTypes.get(i).toString() );%></option>
 	<% } %> 
 	</select>
 
-	
 	<b>VILLE :</b>	
-	<select name="Ville">
-  		<option value="Angers">None</option>
+	<select name="Ville" id="Ville">
+  		<option value="none">None</option>
   		<% int nombreVilles = (int) request.getAttribute("tailleListeVille");
                		 for(int i = 0; i < nombreVilles; i++) { %>
- 		<option value="Ville"><% List nomVilles = (List) request.getAttribute("nomVilles");
+ 		<option> <% List nomVilles = (List) request.getAttribute("nomVilles");
               			out.println( nomVilles.get(i).toString() );%></option>
 	<% } %> 
 	</select>
@@ -48,7 +53,7 @@
 	</select>	
 
 	<b>DATE :</b>
-	<input type="text" value="2018-12-31" id="Date" size="7">
+	<input type="text" value="2018-12-31" id="Date" size="12">
 	
 	<br>
 	<br>
