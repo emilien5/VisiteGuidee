@@ -6,6 +6,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<title>Reservation</title>
+	<link type="text/css" rel="stylesheet" href="select.css" />
 
 </head>
 
@@ -24,6 +25,7 @@
 	<input id="password" name="password" type="hidden" value="<%=password%>">
 	
 	<b>TYPE :</b>
+	
 	<select name="Type" id="Type">	
   		<option value="none">None</option>
   		<% int nombreTypes = (int) request.getAttribute("tailleListeTypes");
@@ -44,8 +46,8 @@
 	</select>
 
 	<b>PRIX MAXIMUM :</b>
-	<select name="Prix">
-  		<option value="none">None</option>
+	<select name="Prix" id="Prix">
+  		<option value="0">None</option>
  		<option value="25">25 euros</option>
   		<option value="50">50 euros</option>
   		<option value="75">75 euros</option>
@@ -109,11 +111,10 @@
 			</tbody>
 	</table>
 	<br>
-	<input type="submit" value="Reserver" id="Reserver">
+	<input type="submit" value="Réserver" id="Reserver">
 	<br>
 	<br>
 		<a href="index.jsp">Déconnexion</a>
 	</form>
-
 </body>
 </html>
