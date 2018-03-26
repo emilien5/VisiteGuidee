@@ -19,6 +19,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import jee.GestionVisiteSEI;
+import jee.GestionVisiteService;
 import jee.TrouverVisite;
 import jee.TrouverVisiteResponse;
 import jee.Visite;
@@ -40,9 +42,8 @@ public class ConnexionServlet extends HttpServlet {
     public static final String CHAMP_PASS = "motdepasse";
     
     public String urlBddclientWindows = "jdbc:mysql://localhost:3306/bdd_client?user=user&password=user";
-    public String urlBddGestionVisitesWindows = "jdbc:mysql://localhost:3306/gestionvisites?user=user&password=user";
     public String urlBddclientMac = "jdbc:mysql://localhost:8889/bdd_client?user=root&password=root";
-    public String urlBddGestionVisitesMac = "jdbc:mysql://localhost:8889/bdd_reservation?user=root&password=root";
+
     
     public List<String> listeTypeVisite = new ArrayList<>();
     public List<String> listeVille = new ArrayList<>();
@@ -51,8 +52,10 @@ public class ConnexionServlet extends HttpServlet {
     
     Set<String> setListeTypeVisite = new HashSet<String>();
     Set<String> setListeVille = new HashSet<String>();
-//    Set<String> setListeDateVisite = new HashSet<String>();
-//    Set<Integer> setListePrixVisite = new HashSet<Integer>();
+    public List<String> nomTypes = new ArrayList<>();
+    public List<String> nomVilles = new ArrayList<>();
+    
+    ArrayList<Visite> listeVisite = new ArrayList<Visite>();
     
     public int tailleListeTypes = 0;
     public int tailleListeVille = 0; 
@@ -83,16 +86,23 @@ public class ConnexionServlet extends HttpServlet {
 				if(valide == true ) {
 					/* Stockage du résultat et des messages d'erreur dans l'objet request */
 			        request.setAttribute( CHAMP_NOM_UTILISATEUR, nomUtilisateur );
-			        request.setAttribute( CHAMP_PASS, motDePasse );			        
+			        request.setAttribute( CHAMP_PASS, motDePasse );		
+			        
 			        request.setAttribute("TypeVisite", this.listeTypeVisite);
 			        request.setAttribute("Ville", this.listeVille);
 				    request.setAttribute("DateVisite", this.listeDateVisite);
 				    request.setAttribute("PrixVisite", this.listePrixVisite);
+				    
+				    request.setAttribute("nomTypes", nomTypes);
+				    request.setAttribute("nomVilles", nomVilles);
+				    
 				    request.setAttribute("NbVisites", nbVisites);
 				    request.setAttribute("tailleListeTypes", tailleListeTypes);
 				    request.setAttribute("tailleListeVille", tailleListeVille);
 				    
-			        /* Transmission de la paire d'objets request/response � notre JSP */
+				    request.setAttribute("listeVisite", listeVisite);
+				    
+			        /* Transmission de la paire d'objets request/response à notre JSP */
 			        this.getServletContext().getRequestDispatcher( VUE ).forward( request, response );		        
 				
 				} else {
@@ -115,7 +125,7 @@ public class ConnexionServlet extends HttpServlet {
 	                    return true;
 	            }
 		    	} catch ( SQLException e ) {
-		    	    /* G�rer les �ventuelles erreurs ici */
+		    	    /* Gérer les éventuelles erreurs ici */
 		    		e.printStackTrace();
 		    	} 	
 	        return false;
@@ -127,22 +137,24 @@ public class ConnexionServlet extends HttpServlet {
 	    	uneVisite.setPrixVisite(0);
 	    	uneVisite.setTypeVisite("none");
 	    	uneVisite.setVille("none");
+	    		    	
+	    	GestionVisiteService service = new GestionVisiteService();
+	    	GestionVisiteSEI port = service.getGestionVisitePort();
+	    	listeVisite = (ArrayList<Visite>) port.trouverVisite(uneVisite);
+	    	nbVisites = listeVisite.size();
 	    	
-	    	TrouverVisite serviceTrouver = new TrouverVisite();
-	    	serviceTrouver.setArg0(uneVisite);
-	    	TrouverVisiteResponse reponseServiceTrouver = new TrouverVisiteResponse();
-	    	nbVisites = reponseServiceTrouver.getReturn().size();	    	
 			for(int i=0; i<nbVisites; i++) {
-				setListeTypeVisite.add(reponseServiceTrouver.getReturn().get(i).getTypeVisite());
-				setListeVille.add(reponseServiceTrouver.getReturn().get(i).getVille());
-//				setListeDateVisite.add(reponseServiceTrouver.getReturn().get(i).getDateVisite());
-//				setListePrixVisite.add(reponseServiceTrouver.getReturn().get(i).getPrixVisite());
+				this.listeTypeVisite.add(listeVisite.get(i).getTypeVisite());
+				this.listeVille.add(listeVisite.get(i).getVille());
+				this.listeDateVisite.add(listeVisite.get(i).getDateVisite());
+				this.listePrixVisite.add(String.valueOf(listeVisite.get(i).getPrixVisite()));
 			}
-			listeTypeVisite.addAll(listeTypeVisite);
-			listeVille.addAll(listeVille);
-//			listeDateVisite.addAll(listeDateVisite);
-//			listePrixVisite.addAll(listePrixVisite);
-			tailleListeTypes = listeTypeVisite.size();
-			tailleListeVille = listeVille.size();
+			setListeTypeVisite.addAll(this.listeTypeVisite);
+			setListeVille.addAll(this.listeVille);
+			nomTypes = new ArrayList<String>(setListeTypeVisite);
+			nomVilles = new ArrayList<String>(setListeVille);
+			tailleListeTypes = setListeTypeVisite.size();
+			tailleListeVille = setListeVille.size();
+			
 	    }
 	}
