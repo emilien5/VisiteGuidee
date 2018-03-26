@@ -13,7 +13,7 @@
 	Bienvenue <b><% String attribut = (String) request.getAttribute("nom");out.println( attribut );%></b>
 	<br>
 	<br>
-	Choisissez vos visites parmis les  <% String NbVisites = (String) request.getAttribute("NbVisites");out.println( NbVisites );%> visites disponibles :
+	Choisissez vos visites parmis les  <% int NbVisites = (int) request.getAttribute("NbVisites");out.println( NbVisites );%> visites disponibles :
 	<br>
 	<br>
 	<form method="post"  action="ValiderRechercheServlet">
@@ -21,9 +21,9 @@
 	<div class="custom-select" style="width:200px;">
 	<select name="Type">	
   		<option value="Familliale">None</option>
-  		<% int nombreTypes = Integer.parseInt((String)request.getAttribute("nombreTypes"));
+  		<% int nombreTypes = (int) request.getAttribute("tailleListeTypes");
                		 for(int i = 0; i < nombreTypes; i++) { %>
- 		<option value="Type"><% List Types = (List) request.getAttribute("Types");out.println( Types.get(i) );%></option>
+ 		<option value="Type"><% List Types = (List) request.getAttribute("TypeVisite");out.println( Types.get(i) );%></option>
 	<% } %> 
 	</select>
 	</div>
@@ -34,7 +34,7 @@
 	<div class="custom-select" style="width:200px;">	
 	<select name="Ville">
   		<option value="Angers">None</option>
-  		<% int nombreVilles = Integer.parseInt((String)request.getAttribute("nombreVilles"));
+  		<% int nombreVilles = (int) request.getAttribute("tailleListeVille");
                		 for(int i = 0; i < nombreVilles; i++) { %>
  		<option value="Ville"><% List Villes = (List) request.getAttribute("Villes");out.println( Villes.get(i) );%></option>
 	<% } %> 
@@ -77,7 +77,7 @@
 	               	<%@ page import ="java.util.ArrayList"%>
 					<%@ page import ="java.util.List"%>
                 
-               		 <% int nombreVistite = Integer.parseInt((String)request.getAttribute("NbVisites"));
+               		 <% int nombreVistite = (int) request.getAttribute("NbVisites");
                		 for(int i = 0; i < nombreVistite; i++) { %>
                		 
                		 <td>

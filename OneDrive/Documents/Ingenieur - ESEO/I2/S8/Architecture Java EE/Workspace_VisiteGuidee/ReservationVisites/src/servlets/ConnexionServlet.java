@@ -8,14 +8,20 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import jee.TrouverVisite;
+import jee.TrouverVisiteResponse;
+import jee.Visite;
 
 /**
  * Servlet implementation class ConnexionServlet
@@ -42,7 +48,15 @@ public class ConnexionServlet extends HttpServlet {
     public List<String> listeVille = new ArrayList<>();
     public List<String> listeDateVisite = new ArrayList<>();
     public List<String> listePrixVisite = new ArrayList<>();
-    public String nbVisites = "0";
+    
+    Set<String> setListeTypeVisite = new HashSet<String>();
+    Set<String> setListeVille = new HashSet<String>();
+//    Set<String> setListeDateVisite = new HashSet<String>();
+//    Set<Integer> setListePrixVisite = new HashSet<Integer>();
+    
+    public int tailleListeTypes = 0;
+    public int tailleListeVille = 0; 
+    public int nbVisites = 0;
     
     /**
      * @see HttpServlet#HttpServlet()
@@ -64,18 +78,20 @@ public class ConnexionServlet extends HttpServlet {
 
 	        try {
 				boolean valide = informationValide(nomUtilisateur, motDePasse);
-				boolean valide2 = connexionBddVisite();
+				remplissageListes();
 				
-				if(valide == true && valide2 == true) {
-					/* Stockage du r�sultat et des messages d'erreur dans l'objet request */
+				if(valide == true ) {
+					/* Stockage du résultat et des messages d'erreur dans l'objet request */
 			        request.setAttribute( CHAMP_NOM_UTILISATEUR, nomUtilisateur );
-			        request.setAttribute( CHAMP_PASS, motDePasse );
-			        
+			        request.setAttribute( CHAMP_PASS, motDePasse );			        
 			        request.setAttribute("TypeVisite", this.listeTypeVisite);
 			        request.setAttribute("Ville", this.listeVille);
-				    	request.setAttribute("DateVisite", this.listeDateVisite);
-				    	request.setAttribute("PrixVisite", this.listePrixVisite);
-				    	request.setAttribute("NbVisites", nbVisites);
+				    request.setAttribute("DateVisite", this.listeDateVisite);
+				    request.setAttribute("PrixVisite", this.listePrixVisite);
+				    request.setAttribute("NbVisites", nbVisites);
+				    request.setAttribute("tailleListeTypes", tailleListeTypes);
+				    request.setAttribute("tailleListeVille", tailleListeVille);
+				    
 			        /* Transmission de la paire d'objets request/response � notre JSP */
 			        this.getServletContext().getRequestDispatcher( VUE ).forward( request, response );		        
 				
@@ -105,37 +121,28 @@ public class ConnexionServlet extends HttpServlet {
 	        return false;
 	    }
 	    
-	    private boolean connexionBddVisite() throws ClassNotFoundException{
-			Class.forName("com.mysql.jdbc.Driver");
-		    try(Connection connexionVisite = DriverManager.getConnection(urlBddGestionVisitesWindows);
-		    		Statement statement = connexionVisite.createStatement();
-		    		ResultSet resultat = statement.executeQuery( "SELECT typeVisite, ville, dateVisite, prixVisite FROM Visite" )){
-
-		    	if(resultat.next() != false) {
-			    	/* R�cup�ration des donn�es du r�sultat de la requ�te de lecture */
-		    		this.listeTypeVisite.clear();
-		    		this.listePrixVisite.clear();
-		    		this.listeDateVisite.clear();
-		    		this.listeVille.clear();
-		    		this.listeTypeVisite.add(resultat.getString("typeVisite"));
-		    		this.listeVille.add(resultat.getString("ville"));
-		    		this.listeDateVisite.add(resultat.getString("dateVisite"));
-		    		this.listePrixVisite.add(resultat.getString("prixVisite"));
-			    	while ( resultat.next() ) {
-			    		
-			    		this.listeTypeVisite.add(resultat.getString("typeVisite"));
-			    		this.listeVille.add(resultat.getString("ville"));
-			    		this.listeDateVisite.add(resultat.getString("dateVisite"));
-			    		this.listePrixVisite.add(resultat.getString("prixVisite"));
-			    		this.nbVisites = String.valueOf(this.listeTypeVisite.size());
-			    	}
-	            return true;
-	        }
-		    	
-		    	} catch ( SQLException e ) {
-		    	    /* G�rer les �ventuelles erreurs ici */
-		    		e.printStackTrace();
-		    	}    	
-		    return false;
+	    private void remplissageListes() throws ClassNotFoundException{
+	    	Visite uneVisite = new Visite();
+	    	uneVisite.setDateVisite("none");
+	    	uneVisite.setPrixVisite(0);
+	    	uneVisite.setTypeVisite("none");
+	    	uneVisite.setVille("none");
+	    	
+	    	TrouverVisite serviceTrouver = new TrouverVisite();
+	    	serviceTrouver.setArg0(uneVisite);
+	    	TrouverVisiteResponse reponseServiceTrouver = new TrouverVisiteResponse();
+	    	nbVisites = reponseServiceTrouver.getReturn().size();	    	
+			for(int i=0; i<nbVisites; i++) {
+				setListeTypeVisite.add(reponseServiceTrouver.getReturn().get(i).getTypeVisite());
+				setListeVille.add(reponseServiceTrouver.getReturn().get(i).getVille());
+//				setListeDateVisite.add(reponseServiceTrouver.getReturn().get(i).getDateVisite());
+//				setListePrixVisite.add(reponseServiceTrouver.getReturn().get(i).getPrixVisite());
+			}
+			listeTypeVisite.addAll(listeTypeVisite);
+			listeVille.addAll(listeVille);
+//			listeDateVisite.addAll(listeDateVisite);
+//			listePrixVisite.addAll(listePrixVisite);
+			tailleListeTypes = listeTypeVisite.size();
+			tailleListeVille = listeVille.size();
 	    }
 	}
