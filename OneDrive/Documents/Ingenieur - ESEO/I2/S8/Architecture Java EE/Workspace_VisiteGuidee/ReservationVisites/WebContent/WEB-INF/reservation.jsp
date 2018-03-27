@@ -80,9 +80,9 @@
                 
                		 <% int nombreVistite = (int) request.getAttribute("NbVisites");
                		 for(int i = 0; i < nombreVistite; i++) { %>
-               		 
+               		 <% String valeur = "checkBox"+String.valueOf(i); %>
                		 <td>
-              		 	<input id="checkBox" type="checkbox">
+              		 	<input id="<%= valeur %>" name="<%= valeur %>" type="checkbox">
               		 </td>
               		 
               		<td>

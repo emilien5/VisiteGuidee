@@ -12,7 +12,50 @@
 	<br>
 	<br>
 
+<form method="post"  action="ValiderReservationServlet">
+	<br>
+	<br>
+	<table border="1" id="visite">
+    	<tr>
+            <th>Type</th>
+            <th>Ville</th>
+            <th>Date</th>
+            <th>Prix (euros)</th>
+		</tr>
+            <tbody>
+                <tr>
+	               	<%@ page import ="java.util.ArrayList"%>
+					<%@ page import ="java.util.List"%>
+                
+               		 <% int nombreVistite = (int) request.getAttribute("nombreVisitesCb");
+               		 for(int i = 0; i <nombreVistite; i++) { %>
+              		 
+              		<td>
+              		<% List TypeVisite = (List) request.getAttribute("listeTypeVisiteCb");
+              			out.println( TypeVisite.get(i) );%>
+              		 </td>
+              		 
+              		 <td>
+              		<% List Ville = (List) request.getAttribute("listeVilleCb");
+              			out.println( Ville.get(i) );%>
+              		 </td>
+              		 
+              		 <td>
+              		<% List DateVisite = (List) request.getAttribute("listeDateVisiteCb");
+              			out.println( DateVisite.get(i) );%>
+              		 </td>
+              		 
+              		 <td>
+              		<% List PrixVisite = (List) request.getAttribute("listePrixVisiteCb");
+              		 	out.println( PrixVisite.get(i) );%>
+              		 </td>
+              		 
+              	</tr>
+              		<% } %> 
 
+			</tbody>
+	</table>
+	<br>
 	<br>
 	<input type="submit" value="Paiement" id="Paiement">
 	<br>
