@@ -18,7 +18,7 @@
 	<br>
 	<br>
 	
-	<form method="post"  action="ConnexionServlet">
+	<form  action="ConnexionServlet">
 	<% String user = (String) request.getAttribute("nom");%>
 	<% String password = (String) request.getAttribute("motdepasse");%>
 	<input id="user" name="user" type="hidden" value="<%=user%>">
@@ -48,14 +48,14 @@
 	<b>PRIX MAXIMUM :</b>
 	<select name="Prix" id="Prix">
   		<option value="0">None</option>
- 		<option value="25">25 euros</option>
-  		<option value="50">50 euros</option>
-  		<option value="75">75 euros</option>
+ 		<option value="50">50 euros</option>
   		<option value="100">100 euros</option>
+  		<option value="150">150 euros</option>
+  		<option value="200">200 euros</option>
 	</select>	
 
 	<b>DATE :</b>
-	<input type="text" value="2018-12-31" id="Date" size="12">
+	<input type="text" name="Date" value="none" id="Date" size="12">
 	
 	<br>
 	<br>

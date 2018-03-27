@@ -18,6 +18,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.velocity.runtime.directive.Parse;
 
@@ -38,6 +39,7 @@ public class ConnexionServlet extends HttpServlet {
 	private String typeSelectionne;
 	private String villeSelectionnee;
 	private int prixSelectionne;
+	private String dateSelectionnee;
     
 	public static final String VUE = "/WEB-INF/reservation.jsp";
 	public static final String VUE_ERREUR = "/WEB-INF/connexionErreurs.jsp";
@@ -45,7 +47,7 @@ public class ConnexionServlet extends HttpServlet {
     public static final String CHAMP_NOM_UTILISATEUR = "nom";
     public static final String CHAMP_PASS = "motdepasse";
     
-    public String urlBddclientWindows = "jdbc:mysql://localhost:3306/bdd_client?user=user&password=user";
+    public String urlBddclientWindows = "jdbc:mysql://localhost:3306/bdd_client?user=root&password=";
     public String urlBddclientMac = "jdbc:mysql://localhost:8889/bdd_client?user=root&password=root";
 
     
@@ -82,16 +84,20 @@ public class ConnexionServlet extends HttpServlet {
 	        /* R�cup�ration des champs du formulaire. */
 	        nomUtilisateur = request.getParameter(CHAMP_NOM_UTILISATEUR);
 	        motDePasse = request.getParameter(CHAMP_PASS);
+	        
+	        HttpSession session = request.getSession();
+	        session.setAttribute("nomUtilisateur", nomUtilisateur);
+	        session.setAttribute("motDePasse", motDePasse);
 
 	        if(request.getParameter(CHAMP_NOM_UTILISATEUR) == null || request.getParameter(CHAMP_PASS) == null) {
 		        nomUtilisateur = request.getParameter("user");
 		        motDePasse = request.getParameter("password");
 	        }
-
 	        if(request.getParameter("Type") != null) typeSelectionne = request.getParameter("Type");
 	        if(request.getParameter("Ville") != null) villeSelectionnee = request.getParameter("Ville");
+	        if(request.getParameter("Date") != null) dateSelectionnee = request.getParameter("Date");
 	        if(request.getParameter("Prix") != null) prixSelectionne = Integer.parseInt(request.getParameter("Prix"));
-	        
+	        System.out.println(this.dateSelectionnee);
 	        try {
 				boolean valide = informationValide(nomUtilisateur, motDePasse);				
 				remplissageListes();
@@ -148,6 +154,9 @@ public class ConnexionServlet extends HttpServlet {
 	    	this.listePrixVisite.clear();
 	    	this.listeTypeVisite.clear();
 	    	this.listeVille.clear();
+	    	listeVisite.clear();
+	    	this.nomTypes.clear();
+	    	this.nomVilles.clear();
 	    	
 	    	Visite uneVisite = new Visite();
 	    	uneVisite.setDateVisite("none");
@@ -155,10 +164,12 @@ public class ConnexionServlet extends HttpServlet {
 	    	uneVisite.setTypeVisite("none");
 	    	uneVisite.setVille("none");
 	    	
+	    	
 	    	if(this.typeSelectionne != null) uneVisite.setTypeVisite(this.typeSelectionne);
 	    	if(this.villeSelectionnee != null) uneVisite.setVille(this.villeSelectionnee);
 	    	if(this.prixSelectionne != 0) uneVisite.setPrixVisite(this.prixSelectionne);
-
+	    	if(this.dateSelectionnee != null) uneVisite.setDateVisite(this.dateSelectionnee);
+	    	
 	    	GestionVisiteService service = new GestionVisiteService();
 	    	GestionVisiteSEI port = service.getGestionVisitePort();
 	    	listeVisite = (ArrayList<Visite>) port.trouverVisite(uneVisite);
@@ -177,5 +188,9 @@ public class ConnexionServlet extends HttpServlet {
 			tailleListeTypes = setListeTypeVisite.size();
 			tailleListeVille = setListeVille.size();
 			
+			this.typeSelectionne = null;
+			this.villeSelectionnee = null;
+			this.prixSelectionne = 0;
+			this.dateSelectionnee = null;
 	    }
 	}

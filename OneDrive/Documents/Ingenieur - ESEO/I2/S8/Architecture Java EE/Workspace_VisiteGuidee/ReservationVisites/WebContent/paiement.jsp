@@ -8,59 +8,17 @@
 </head>
 <body>
 
-	Bienvenue <b><% String attribut = (String) request.getAttribute("nom");out.println( attribut );%></b>
+	Bienvenue <b><% String nomUtilisateur = (String) request.getAttribute("nomUtilisateur");out.println( nomUtilisateur );%></b>
 	<br>
 	<br>
 
-<form method="post"  action="ValiderPaiementServlet">
-	<br>
-	<br>
-	<table border="1" id="visite">
-    	<tr>
-            <th>Type</th>
-            <th>Ville</th>
-            <th>Date</th>
-            <th>Prix (euros)</th>
-		</tr>
-            <tbody>
-                <tr>
-	               	<%@ page import ="java.util.ArrayList"%>
-					<%@ page import ="java.util.List"%>
-                
-               		 <% int nombreVistite = Integer.parseInt((String)request.getAttribute("NbVisites"));
-               		 for(int i = 0; i < nombreVistite; i++) { %>
-              		 
-              		<td>
-              		<% List TypeVisite = (List) request.getAttribute("TypeVisite");
-              			out.println( TypeVisite.get(i) );%>
-              		 </td>
-              		 
-              		 <td>
-              		<% List Ville = (List) request.getAttribute("Ville");
-              			out.println( Ville.get(i) );%>
-              		 </td>
-              		 
-              		 <td>
-              		<% List DateVisite = (List) request.getAttribute("DateVisite");
-              			out.println( DateVisite.get(i) );%>
-              		 </td>
-              		 
-              		 <td>
-              		<% List PrixVisite = (List) request.getAttribute("PrixVisite");
-              		 	out.println( PrixVisite.get(i) );%>
-              		 </td>
-              		 
-              	</tr>
-              		<% } %> 
 
-			</tbody>
-	</table>
 	<br>
 	<input type="submit" value="Paiement" id="Paiement">
 	<br>
 	<br>
-		<a href="reservation.jsp">Retour !</a>
-	</form>
+		<a href="index.jsp">Déconnexion</a>
+	
 
 </body>
 </html>
