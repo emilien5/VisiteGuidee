@@ -85,6 +85,7 @@
               		 	<input id="<%= valeur %>" name="<%= valeur %>" type="checkbox">
               		 </td>
               		 
+              		 
               		<td>
               		<% List TypeVisite = (List) request.getAttribute("TypeVisite");
               			out.println( TypeVisite.get(i) );%>
@@ -110,6 +111,10 @@
 
 			</tbody>
 	</table>
+	<br>
+	Nombre de places *: 
+	<input id="nbPlaces" name="nbPlaces" type="text" required>
+	<br>
 	<br>
 	<input type="submit" value="Réserver" id="Reserver">
 	<br>

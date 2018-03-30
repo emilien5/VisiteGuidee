@@ -7,10 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.ServletException;
@@ -19,8 +17,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import org.apache.velocity.runtime.directive.Parse;
 
 import jee.GestionVisiteSEI;
 import jee.GestionVisiteService;
@@ -33,34 +29,44 @@ import jee.Visite;
 public class ConnexionServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
+	/* Les informations de l'utilisateurs */
 	private String nomUtilisateur;
 	private String motDePasse;
+	private int idUtilisateur;
 	
+	/* Les listes que l'utilisateur a trier apres une recherche */
 	private String typeSelectionne;
 	private String villeSelectionnee;
 	private int prixSelectionne;
 	private String dateSelectionnee;
     
+	/* Les attributs passe-partouts de redirections et identifiants */
 	public static final String VUE = "/WEB-INF/reservation.jsp";
 	public static final String VUE_ERREUR = "/WEB-INF/connexionErreurs.jsp";
 	public static final String VUE_INSCRIPTION = "/WEB-INF/inscription.jsp";
     public static final String CHAMP_NOM_UTILISATEUR = "nom";
     public static final String CHAMP_PASS = "motdepasse";
     
-    public String urlBddclientWindows = "jdbc:mysql://localhost:3306/bdd_client?user=root&password=";
+    /* Connections a la BDD pour Windows  et pour Mac pour ne pas utiliser de ficihier .properties */
+    public String urlBddclientWindows = "jdbc:mysql://localhost:3306/bdd_client?user=user&password=user";
     public String urlBddclientMac = "jdbc:mysql://localhost:8889/bdd_client?user=root&password=root";
 
-    
+    /* Les listes de chaque attributs de l'entite Visite */
     public List<String> listeTypeVisite = new ArrayList<>();
     public List<String> listeVille = new ArrayList<>();
     public List<String> listeDateVisite = new ArrayList<>();
     public List<String> listePrixVisite = new ArrayList<>();
+    public List<String> listeIdVisite = new ArrayList<>();
     
+    /* Creation de HashSet pour ne pas avoir de doublon dans les listes deroulantes */
     Set<String> setListeTypeVisite = new HashSet<String>();
     Set<String> setListeVille = new HashSet<String>();
+    
+    /* Liste deroulantes Types et Villes */
     public List<String> nomTypes = new ArrayList<>();
     public List<String> nomVilles = new ArrayList<>();
     
+    /* Regroupe toutes les visites de la BDD */
     ArrayList<Visite> listeVisite = new ArrayList<Visite>();
     
     public int tailleListeTypes = 0;
@@ -79,16 +85,10 @@ public class ConnexionServlet extends HttpServlet {
 	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		 Map<String, String> erreurs = new HashMap<>();
-		 	
-	        /* R�cup�ration des champs du formulaire. */
+		 /* Recuperation des champs du formulaire. */
 	        nomUtilisateur = request.getParameter(CHAMP_NOM_UTILISATEUR);
 	        motDePasse = request.getParameter(CHAMP_PASS);
-	        
-	        HttpSession session = request.getSession();
-	        session.setAttribute("nomUtilisateur", nomUtilisateur);
-	        session.setAttribute("motDePasse", motDePasse);
-
+	        HttpSession session = request.getSession();	        
 	        if(request.getParameter(CHAMP_NOM_UTILISATEUR) == null || request.getParameter(CHAMP_PASS) == null) {
 		        nomUtilisateur = request.getParameter("user");
 		        motDePasse = request.getParameter("password");
@@ -97,11 +97,12 @@ public class ConnexionServlet extends HttpServlet {
 	        if(request.getParameter("Ville") != null) villeSelectionnee = request.getParameter("Ville");
 	        if(request.getParameter("Date") != null) dateSelectionnee = request.getParameter("Date");
 	        if(request.getParameter("Prix") != null) prixSelectionne = Integer.parseInt(request.getParameter("Prix"));
-	        System.out.println(this.dateSelectionnee);
+	        
+	        /* Se connecte a la BDD, verifie les informations et genere les listes necessaires */
 	        try {
 				boolean valide = informationValide(nomUtilisateur, motDePasse);				
 				remplissageListes();
-
+				//getIdentifiant(nomUtilisateur, motDePasse);
 				if(valide == true) {
 					/* Stockage du résultat et des messages d'erreur dans l'objet request */
 			        request.setAttribute(CHAMP_NOM_UTILISATEUR, nomUtilisateur);
@@ -120,7 +121,19 @@ public class ConnexionServlet extends HttpServlet {
 				    request.setAttribute("tailleListeVille", tailleListeVille);
 				    
 				    request.setAttribute("listeVisite", listeVisite);
-
+				    
+				    
+			        session.setAttribute("nomUtilisateur", nomUtilisateur);
+			        session.setAttribute("motDePasse", motDePasse);
+			        session.setAttribute("NbVisites", nbVisites);
+			        session.setAttribute("listeTypeVisite",listeTypeVisite);
+			        session.setAttribute("listeVille",listeVille);
+			        session.setAttribute("listeDateVisite",listeDateVisite);
+			        session.setAttribute("listePrixVisite",listePrixVisite);
+			        session.setAttribute("listeIdVisite", listeIdVisite);
+			        //session.setAttribute("idUtilisateur", idUtilisateur);
+			        //System.out.println("idUtilisateur = "+idUtilisateur);
+			        
 			        /* Transmission de la paire d'objets request/response à notre JSP */
 			        this.getServletContext().getRequestDispatcher( VUE ).forward( request, response );		        
 				} else {
@@ -139,7 +152,7 @@ public class ConnexionServlet extends HttpServlet {
 	        try(Connection connexion = DriverManager.getConnection(urlBddclientWindows);
 	            Statement statement = connexion.createStatement();
 	            ResultSet resultat = statement.executeQuery( "SELECT idUtilisateur FROM Utilisateur WHERE nomUtilisateur = '"+ id +"' and motDePasse = '"+ mp +"'" )) {
-		    	    if(resultat.next() != false) {
+	        		if(resultat.next() != false) {
 	                    return true;
 	            }
 		    	} catch ( SQLException e ) {
@@ -149,15 +162,33 @@ public class ConnexionServlet extends HttpServlet {
 	        return false;
 	    }
 	    
+	    /* Recupere l'identifiant de l'utilisateur qui s'est connecter */
+	    private int getIdentifiant(String id, String mp) throws SQLException, ClassNotFoundException {
+	    	Class.forName("com.mysql.jdbc.Driver");
+	    	try(Connection connexion = DriverManager.getConnection(urlBddclientWindows);
+		            Statement statement = connexion.createStatement();
+		            ResultSet resultat = statement.executeQuery( "SELECT idUtilisateur FROM Utilisateur WHERE nomUtilisateur = '"+ id +"' and motDePasse = '"+ mp +"'" )) {
+	    			idUtilisateur = resultat.getInt("idUtilisateur");
+	    	} catch ( SQLException e ) {
+    	    /* Gérer les éventuelles erreurs ici */
+    		e.printStackTrace();
+	    } 
+	    	return idUtilisateur;
+	    }
+	    
+	    /* Rempli toutes les listes pour l'affichage sur le JSP, le tri et la selection */
 	    private void remplissageListes() throws ClassNotFoundException{
+	    	/* Nettoie toutes les listes */
 	    	this.listeDateVisite.clear();
 	    	this.listePrixVisite.clear();
 	    	this.listeTypeVisite.clear();
 	    	this.listeVille.clear();
+	    	this.listeIdVisite.clear();
 	    	listeVisite.clear();
 	    	this.nomTypes.clear();
 	    	this.nomVilles.clear();
 	    	
+	    	/* Creation de la visite  none pour recuperer toutes les visites existantes */
 	    	Visite uneVisite = new Visite();
 	    	uneVisite.setDateVisite("none");
 	    	uneVisite.setPrixVisite(0);
@@ -180,6 +211,7 @@ public class ConnexionServlet extends HttpServlet {
 				this.listeVille.add(listeVisite.get(i).getVille());
 				this.listeDateVisite.add(listeVisite.get(i).getDateVisite());
 				this.listePrixVisite.add(String.valueOf(listeVisite.get(i).getPrixVisite()));
+				this.listeIdVisite.add(String.valueOf(listeVisite.get(i).getIdVisite()));
 			}
 			setListeTypeVisite.addAll(this.listeTypeVisite);
 			setListeVille.addAll(this.listeVille);

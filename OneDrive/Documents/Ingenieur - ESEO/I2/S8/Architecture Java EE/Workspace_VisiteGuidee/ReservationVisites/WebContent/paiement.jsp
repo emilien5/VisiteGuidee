@@ -8,12 +8,13 @@
 </head>
 <body>
 
-	Bienvenue <b><% String nomUtilisateur = (String) request.getAttribute("nomUtilisateur");out.println( nomUtilisateur );%></b>
+	Connecté en tant que <b><% String nomUtilisateur = (String) request.getAttribute("nomUtilisateur");out.println( nomUtilisateur );%></b>
 	<br>
+	<br>
+	Voici le(s) réservations(s) que vous avez choisie(s) :
 	<br>
 
 <form method="post"  action="ValiderReservationServlet">
-	<br>
 	<br>
 	<table border="1" id="visite">
     	<tr>
@@ -58,6 +59,12 @@
 	<br>
 	<br>
 	<input type="submit" value="Paiement" id="Paiement">
+	</form>
+	<br>
+	<br>
+	<form method="post"  action="AnnulerReservationServlet">
+		<input type="submit" value="Annuler" id="Annuler">
+	</form>
 	<br>
 	<br>
 		<a href="index.jsp">Déconnexion</a>
