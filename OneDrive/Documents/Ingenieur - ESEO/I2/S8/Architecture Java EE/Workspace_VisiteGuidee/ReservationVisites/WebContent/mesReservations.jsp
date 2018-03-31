@@ -5,6 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Mes Reservations</title>
+<link type="text/css" rel="stylesheet" href="table.css" />
 </head>
 <body>
 Connecté en tant que <b><% String nomUtilisateur = (String) request.getAttribute("nomUtilisateur");out.println( nomUtilisateur );%></b>

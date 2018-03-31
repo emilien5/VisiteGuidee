@@ -112,7 +112,7 @@
 			</tbody>
 	</table>
 	<br>
-	Nombre de places *: 
+	Nombre de places <font color="red">*</font>: 
 	<input id="nbPlaces" name="nbPlaces" type="text" required>
 	<br>
 	<br>
