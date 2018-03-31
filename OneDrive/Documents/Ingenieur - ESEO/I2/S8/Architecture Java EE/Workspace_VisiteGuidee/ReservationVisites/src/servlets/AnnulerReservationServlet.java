@@ -21,7 +21,7 @@ import jee.ReservationVisite;
 public class AnnulerReservationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	public static final String VUE = "/WEB-INF/reservation.jsp";
+	public static final String VUE = "/WEB-INF/annulation.jsp";
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -40,9 +40,13 @@ public class AnnulerReservationServlet extends HttpServlet {
 		
 		@SuppressWarnings("unchecked")
 		List<String> codeReservation = (List<String>) session.getAttribute("codeReservation");
+		String user = (String) session.getAttribute("nomUtilisateur");
+		String psswd = (String) session.getAttribute("motDePasse");	
 		
-		codeReservation.add("codeReservation");
 		annulerReservation(codeReservation);
+		
+		request.setAttribute("user", user);
+		request.setAttribute("psswd", psswd);
 		
 		this.getServletContext().getRequestDispatcher( VUE ).forward( request, response );
 	}

@@ -102,7 +102,7 @@ public class ConnexionServlet extends HttpServlet {
 	        try {
 				boolean valide = informationValide(nomUtilisateur, motDePasse);				
 				remplissageListes();
-				//getIdentifiant(nomUtilisateur, motDePasse);
+				getIdentifiant(nomUtilisateur, motDePasse);
 				if(valide == true) {
 					/* Stockage du résultat et des messages d'erreur dans l'objet request */
 			        request.setAttribute(CHAMP_NOM_UTILISATEUR, nomUtilisateur);
@@ -131,8 +131,7 @@ public class ConnexionServlet extends HttpServlet {
 			        session.setAttribute("listeDateVisite",listeDateVisite);
 			        session.setAttribute("listePrixVisite",listePrixVisite);
 			        session.setAttribute("listeIdVisite", listeIdVisite);
-			        //session.setAttribute("idUtilisateur", idUtilisateur);
-			        //System.out.println("idUtilisateur = "+idUtilisateur);
+			        session.setAttribute("idUtilisateur", idUtilisateur);
 			        
 			        /* Transmission de la paire d'objets request/response à notre JSP */
 			        this.getServletContext().getRequestDispatcher( VUE ).forward( request, response );		        
@@ -168,7 +167,9 @@ public class ConnexionServlet extends HttpServlet {
 	    	try(Connection connexion = DriverManager.getConnection(urlBddclientWindows);
 		            Statement statement = connexion.createStatement();
 		            ResultSet resultat = statement.executeQuery( "SELECT idUtilisateur FROM Utilisateur WHERE nomUtilisateur = '"+ id +"' and motDePasse = '"+ mp +"'" )) {
-	    			idUtilisateur = resultat.getInt("idUtilisateur");
+	    			if(resultat.next() != false) {
+	    				idUtilisateur = resultat.getInt("idUtilisateur");
+	    			}
 	    	} catch ( SQLException e ) {
     	    /* Gérer les éventuelles erreurs ici */
     		e.printStackTrace();
@@ -213,6 +214,7 @@ public class ConnexionServlet extends HttpServlet {
 				this.listePrixVisite.add(String.valueOf(listeVisite.get(i).getPrixVisite()));
 				this.listeIdVisite.add(String.valueOf(listeVisite.get(i).getIdVisite()));
 			}
+			
 			setListeTypeVisite.addAll(this.listeTypeVisite);
 			setListeVille.addAll(this.listeVille);
 			nomTypes = new ArrayList<String>(setListeTypeVisite);

@@ -4,17 +4,16 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Paiement</title>
+<title>Mes Reservations</title>
 </head>
 <body>
-
-	Connecté en tant que <b><% String nomUtilisateur = (String) request.getAttribute("nomUtilisateur");out.println( nomUtilisateur );%></b>
+Connecté en tant que <b><% String nomUtilisateur = (String) request.getAttribute("nomUtilisateur");out.println( nomUtilisateur );%></b>
 	<br>
 	<br>
 	Voici le(s) réservations(s) que vous avez choisie(s) :
 	<br>
 
-<form method="post"  action="ValiderReservationServlet">
+<form method="post"  action="ValiderPaiementServlet">
 	<br>
 	<table border="1" id="visite">
     	<tr>

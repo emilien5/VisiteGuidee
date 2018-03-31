@@ -23,7 +23,7 @@ import jee.Visite;
 public class ValiderReservationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-	public static final String VUE = "/paiement.jsp";
+	public static final String VUE = "/mesReservations.jsp";
 	
 	/* Création des ArrayList pour les valeurs des checkBox (cocher ou non, type,ville,date,prix,id,visite) */
 	public List<Boolean> etatCb = new ArrayList<>();
@@ -54,7 +54,7 @@ public class ValiderReservationServlet extends HttpServlet {
 		String user = (String) session.getAttribute("nomUtilisateur");
 		//String psswd = (String) session.getAttribute("motDePasse");	
 		int nbVisites = (int)  session.getAttribute("NbVisites");
-		//int idUtilisateur = (int) session.getAttribute("idUtilisateur");
+		int idUtilisateur = (int) session.getAttribute("idUtilisateur");
 		
 		/* On recupere les listes de la sessions */
 		@SuppressWarnings("unchecked")
@@ -69,10 +69,9 @@ public class ValiderReservationServlet extends HttpServlet {
 		List<String> listeIdVisite = (List<String>) session.getAttribute("listeIdVisite");
 		
 		/* On effectue la reservation suivant les CheckBox cochees */
-		reservation(request,nbVisites,listeTypeVisite,listeVille,listeDateVisite,listePrixVisite,listeIdVisite);
+		reservation(request,nbVisites,idUtilisateur,listeTypeVisite,listeVille,listeDateVisite,listePrixVisite,listeIdVisite);
 		
 		session.setAttribute("codeReservation", codeReservation);	
-		System.out.println(codeReservation);
 		
 		request.setAttribute("nomUtilisateur", user);
 		request.setAttribute("nombreVisitesCb", nombreVisitesCb);
@@ -90,7 +89,7 @@ public class ValiderReservationServlet extends HttpServlet {
 	 * puis reserver les visites selon le nombres de place et l'utilisateur qui reserve
 	 * @param : les listes, la requetes et le nombre de Visites
 	 */ 
-	public void reservation(HttpServletRequest request, int nbVisites, List<String> listeTypeVisite, List<String> listeVille, List<String> listeDateVisite, List<String> listePrixVisite, List<String> listeIdVisite ) {
+	public void reservation(HttpServletRequest request, int nbVisites,int idUtilisateur, List<String> listeTypeVisite, List<String> listeVille, List<String> listeDateVisite, List<String> listePrixVisite, List<String> listeIdVisite ) {
 		/* On vide les listes pour avoir des listes propres a cahque utilisations */
 		etatCb.clear();	
 		listeDateVisiteCb.clear();
@@ -125,10 +124,9 @@ public class ValiderReservationServlet extends HttpServlet {
 		for(int k=0; k<nombreVisitesCb; k++) {
 			maReservation.setIdVisite(Integer.parseInt(listeIdVisiteCb.get(k)));
 			maReservation.setNombrePlace(nbPlaces);
-			//maReservation.setIdClient(idUtilisateur);
-			port.reserverVisite(maReservation);
-			codeReservation.add(String.valueOf(maReservation.getIdReservation()));
-		}		
+			maReservation.setIdClient(idUtilisateur);
+			codeReservation.add(String.valueOf(port.reserverVisite(maReservation)));
+		}
 	}
 
 }
