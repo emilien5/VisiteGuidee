@@ -6,7 +6,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<title>Reservation</title>
-	<link type="text/css" rel="stylesheet" href="select.css" />
+	<link type="text/css" rel="stylesheet" href="table.css" />
 
 </head>
 
